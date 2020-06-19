@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.osworks.domain.exception.NegocioException;
 import com.algaworks.osworks.domain.model.Cliente;
+import com.algaworks.osworks.domain.model.Comentario;
 import com.algaworks.osworks.domain.model.OrdemServico;
 import com.algaworks.osworks.domain.model.StatusOrdemServico;
 import com.algaworks.osworks.domain.repository.ClienteRepository;
+import com.algaworks.osworks.domain.repository.ComentarioRepository;
 import com.algaworks.osworks.domain.repository.OrdemServicoRepository;
 
 @Service
@@ -20,6 +22,9 @@ public class GestaoOrdemServicoService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ComentarioRepository comentarioRepository;
 
 	public OrdemServico criar (OrdemServico ordemServico) {
 		
@@ -30,6 +35,18 @@ public class GestaoOrdemServicoService {
 		ordemServico.setStatus(StatusOrdemServico.ABERTA);
 		ordemServico.setDataAbertura(OffsetDateTime.now());
 		return ordemServicoRepository.save(ordemServico);
+	}
+	
+	public Comentario adicionarComentario(Long ordemServidoId, String descricao) {
+		OrdemServico ordemServico = ordemServicoRepository.findById(ordemServidoId)
+				.orElseThrow(() -> new NegocioException("Ordem de serviço não encontrada"));
+		
+		Comentario comentario = new Comentario();
+		comentario.setDataEnvio(OffsetDateTime.now());
+		comentario.setDescricao(descricao);
+		comentario.setOrdemServico(ordemServico);
+		
+		return comentarioRepository.save(comentario);
 	}
 	
 }
