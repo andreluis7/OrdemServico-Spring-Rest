@@ -37,8 +37,8 @@ public class GestaoOrdemServicoService {
 		return ordemServicoRepository.save(ordemServico);
 	}
 	
-	public Comentario adicionarComentario(Long ordemServidoId, String descricao) {
-		OrdemServico ordemServico = ordemServicoRepository.findById(ordemServidoId)
+	public Comentario adicionarComentario(Long ordemServicoId, String descricao) {
+		OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
 				.orElseThrow(() -> new NegocioException("Ordem de serviço não encontrada"));
 		
 		Comentario comentario = new Comentario();
